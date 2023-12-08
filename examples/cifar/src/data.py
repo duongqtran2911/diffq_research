@@ -6,6 +6,8 @@
 
 import logging
 import torchvision
+import torch
+from torch.utils.data import random_split
 import torchvision.transforms as transforms
 logger = logging.getLogger(__name__)
 
@@ -33,11 +35,12 @@ def get_loader(args, model_name):
             transforms.ToTensor(),
             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
             ])
-        trainset = torchvision.datasets.CIFAR10(
+        trainset = torchvision.datasets.CIFAR100(
             root=args.db.root, train=True, download=True, transform=transform_train)
-        valset = torchvision.datasets.CIFAR10(
-            root=args.db.root, train=True, download=True, transform=transform_val)
-        testset = torchvision.datasets.CIFAR10(
+        val_set_size = int(len(trainset) * 0.2)
+        valset, trainset = random_split(trainset, [val_set_size, len(trainset) - val_set_size],
+                                generator=torch.Generator().manual_seed(0))
+        testset = torchvision.datasets.CIFAR100(
             root=args.db.root, train=False, download=True, transform=transform_test)
         num_classes = 10
 
@@ -61,8 +64,9 @@ def get_loader(args, model_name):
             ])
         trainset = torchvision.datasets.CIFAR100(
             root=args.db.root, train=True, download=True, transform=transform_train)
-        valset = torchvision.datasets.CIFAR100(
-            root=args.db.root, train=False, download=True, transform=transform_val)
+        val_set_size = int(len(trainset) * 0.2)
+        valset, trainset = random_split(trainset, [val_set_size, len(trainset) - val_set_size],
+                                generator=torch.Generator().manual_seed(0))
         testset = torchvision.datasets.CIFAR100(
             root=args.db.root, train=False, download=True, transform=transform_test)
         num_classes = 100
