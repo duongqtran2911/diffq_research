@@ -5,7 +5,7 @@ from diffq import DiffQuantizer
 from resnet import ResNet18
 
 model = ResNet18(num_classes=10)
-optim = ...  # The optimizer must be created before the quantizer
+optim =   # The optimizer must be created before the quantizer
 quantizer = DiffQuantizer(model)
 quantizer.setup_optimizer(optim)
 

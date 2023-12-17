@@ -9,6 +9,7 @@ __pycache__
 /examples/cifar/data/
 /examples/cifar/outputs/
 /examples/deit/output/
+/examples/cifar/src/data
 /notebooks
 /docs
 /bitpack.c
