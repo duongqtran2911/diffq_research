@@ -9,8 +9,9 @@ __pycache__
 /examples/cifar/data/
 /examples/cifar/outputs/
 /examples/deit/output/
-/examples/cifar/src/data
+/examples/cifar/src/data/
 /notebooks
 /docs
 /bitpack.c
 /misc
+examples/cifar/src/data/cifar10/cifar-10-python.tar.gz
