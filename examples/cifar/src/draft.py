@@ -30,7 +30,7 @@ for key, value in model0['state'].items():
 
 print("\nTHIS IS DIFFQ MODEL FROM NOW ON")
 
-model = torch.load("/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=resnet,quant.group_size=16,quant.penalty=5/checkpoint.th")
+model = torch.load("/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=resnet,quant.group_size=8,quant.penalty=5/checkpoint.th")
 print(model.keys())
 state = model['state']
 for key, value in model['state'].items():
