@@ -52,6 +52,7 @@ class Solver(object):
         # Training config
         self.device = args.device
         self.epochs = args.epochs
+        # self.epochs = 1
         self.max_norm = args.max_norm
 
         # Checkpoints
@@ -91,7 +92,6 @@ class Solver(object):
         package['best_state'] = self.best_state
         package['args'] = self.args
         tmp_path = str(self.checkpoint) + ".tmp"
-
         torch.save(package, tmp_path)
         os.rename(tmp_path, path)
 

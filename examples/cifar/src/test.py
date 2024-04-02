@@ -39,7 +39,7 @@ def get_loader():
     # trainset = torchvision.datasets.CIFAR10(
     #     root="diffq/examples/cifar/data/cifar10/cifar-10-batches-py", train=True, download=False, transform=transform_train)
     testset = torchvision.datasets.CIFAR10(
-        root="diffq/examples/cifar/data/cifar10/cifar-10-batches-py", train=False, download=False, transform=transform_test)
+        root="diffq/examples/cifar/data/cifar10/cifar-10-batches-py", train=False, download=True, transform=transform_test)
     num_classes = 10
 
     return testset, num_classes
@@ -93,18 +93,12 @@ def change_name(state_dict, quant = True):
 if __name__ == "__main__":
     # For the standard ResNet model
     testset, num_classes = get_loader()
-    model_1 = load_model("/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=resnet/checkpoint.th",
+    model_1 = load_model("/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=resnet,quant.group_size=16,quant.penalty=5/checkpoint.th",
                         quant=True)
     tt_loader = distrib.loader(testset, batch_size=128, num_workers=1)
     pred, valid_labels = test_fn(tt_loader, model_1, device)
     acc = get_score(valid_labels, pred.argmax(1))
     print(acc)
-    # For the quantized ResNet model
-    quant_params = {
-        'group_size': 8,
-        'penalty': 5
-    }
-
 
 # resnet: 0.9503
 

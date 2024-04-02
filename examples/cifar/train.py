@@ -194,7 +194,10 @@ def run(args):
     # Construct Solver
     solver = slv.Solver(data, model, criterion, optimizer, quantizer, args, model_size)
     solver.train()
-
+    print("training finished")
+    print(f"Model is {quantizer.true_model_size():.1f} MB")
+    print("test size by quantizer")
+    torch.save(quantizer.get_quantized_state(), "draft_quantized_model.pth")
 
 def _main(args):
     global __file__
