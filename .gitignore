@@ -17,3 +17,4 @@ __pycache__
 /misc
 examples/cifar/src/data/cifar10/cifar-10-python.tar.gz
 cifar-10-*
+cifar-100-*
