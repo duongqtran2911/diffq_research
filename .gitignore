@@ -16,3 +16,4 @@ __pycache__
 /bitpack.c
 /misc
 examples/cifar/src/data/cifar10/cifar-10-python.tar.gz
+cifar-10-*
