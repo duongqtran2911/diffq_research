@@ -51,8 +51,8 @@ class Solver(object):
 
         # Training config
         self.device = args.device
-        self.epochs = args.epochs
-        # self.epochs = 1
+        # self.epochs = args.epochs
+        self.epochs = 1
         self.max_norm = args.max_norm
 
         # Checkpoints
@@ -263,5 +263,7 @@ class Solver(object):
                                accuracy=format(total_acc, ".5f"))
             # Just in case, clear some memory
             del loss
+            if i>50:
+                break
         return (distrib.average([total_loss / (i + 1)], i + 1)[0],
                 distrib.average([total_acc], total)[0])
