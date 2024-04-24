@@ -11,7 +11,7 @@ import socket
 import numpy as np
 import hydra
 from torch.utils.data.sampler import SubsetRandomSampler
-
+import diffq
 
 logger = logging.getLogger(__name__)
 
@@ -163,31 +163,39 @@ def run(args):
     else:
         logger.fatal('Invalid optimizer %s', args.optim)
         os._exit(1)
-
-    if args.quant.penalty:
-        quantizer = DiffQuantizer(
+    # if args.quant.penalty:
+    #     quantizer = DiffQuantizer(
+    #         model, group_size=args.quant.group_size,
+    #         min_size=args.quant.min_size,
+    #         min_bits=args.quant.min_bits,
+    #         init_bits=args.quant.init_bits,
+    #         max_bits=args.quant.max_bits,
+    #         exclude=args.quant.exclude)
+    #     if args.quant.adam:
+    #         quantizer.opt = torch.optim.Adam([{"params": []}])
+    #         quantizer.setup_optimizer(quantizer.opt, lr=args.quant.lr)
+    #     else:
+    #         quantizer.setup_optimizer(optimizer, lr=args.quant.lr)
+    # elif args.quant.lsq:
+    #     quantizer = LSQ(
+    #         model, bits=args.quant.bits, min_size=args.quant.min_size,
+    #         exclude=args.quant.exclude)
+    #     quantizer.setup_optimizer(optimizer)
+    # elif args.quant.bits:
+    #     quantizer = UniformQuantizer(
+    #         model, min_size=args.quant.min_size,
+    #         bits=args.quant.bits, qat=args.quant.qat, exclude=args.quant.exclude)
+    # else:
+    #     quantizer = None
+    quantizer = DiffQuantizer(
             model, group_size=args.quant.group_size,
             min_size=args.quant.min_size,
             min_bits=args.quant.min_bits,
             init_bits=args.quant.init_bits,
             max_bits=args.quant.max_bits,
             exclude=args.quant.exclude)
-        if args.quant.adam:
-            quantizer.opt = torch.optim.Adam([{"params": []}])
-            quantizer.setup_optimizer(quantizer.opt, lr=args.quant.lr)
-        else:
-            quantizer.setup_optimizer(optimizer, lr=args.quant.lr)
-    elif args.quant.lsq:
-        quantizer = LSQ(
-            model, bits=args.quant.bits, min_size=args.quant.min_size,
-            exclude=args.quant.exclude)
-        quantizer.setup_optimizer(optimizer)
-    elif args.quant.bits:
-        quantizer = UniformQuantizer(
-            model, min_size=args.quant.min_size,
-            bits=args.quant.bits, qat=args.quant.qat, exclude=args.quant.exclude)
-    else:
-        quantizer = None
+    quantizer.opt = torch.optim.Adam([{"params": []}])
+    quantizer.setup_optimizer(quantizer.opt, lr=args.quant.lr)
 
     criterion = torch.nn.CrossEntropyLoss()
 
@@ -197,7 +205,48 @@ def run(args):
     print("training finished")
     print(f"Model is {quantizer.true_model_size():.1f} MB")
     print("test size by quantizer")
-    torch.save(quantizer.get_quantized_state(), "draft_quantized_model.pth")
+    # quant_state = quantizer.get_quantized_state()
+    # torch.save(quantizer.get_quantized_state(), "draft_quantized_model.pth")
+    torch.save(model, 'saved_model.pth')
+    
+    # Load the saved quantized model and test it
+    # model = ResNet18(num_classes=10)
+    model = torch.load('saved_model.pth')
+    device = torch.device('cuda')
+    model.to(device)
+    # saved_model_path = "draft_quantized_model.pth"
+    # quantized_state = torch.load(saved_model_path)
+    # diffq.restore_quantized_state(model, quantized_state)
+    # quantizer.restore_quantized_state(quant_state)
+    model.eval()
+    
+    # Test the model
+    with torch.no_grad():
+        total = 0
+        correct = 0
+        for images, targets in tt_loader:
+            images, targets = images.to(device), targets.to(device)
+            with torch.no_grad():
+                outputs = model(images)
+            
+            print("new inference method")
+            _, predicted = outputs.max(1)
+            total += targets.size(0)
+            correct += predicted.eq(targets).sum().item()
+        total_acc = 100. * (correct/total)
+
+    world_size=1
+    def average(metrics, count=1.):
+        if world_size == 1:
+            return metrics
+        tensor = torch.tensor(list(metrics) + [1], device='cuda', dtype=torch.float32)
+        tensor *= count
+        torch.distributed.all_reduce(tensor, op=torch.distributed.ReduceOp.SUM)
+        return (tensor[:-1] / tensor[-1]).cpu().numpy().tolist()
+
+    acc = average([total_acc], total)[0]
+
+    print(f'Accuracy of the model on the test images: {acc:.2f}')
 
 def _main(args):
     global __file__
