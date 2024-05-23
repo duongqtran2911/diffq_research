@@ -17,7 +17,7 @@ model = ResNet18(num_classes=10)
 #     init_bits=8,
 #     max_bits=15,
 #     exclude=[])
-quantized_state = torch.load("/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=w_resnet,quant.group_size=16,quant.penalty=5/draft_quantized_model.pth")
+quantized_state = torch.load("/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=resnet,quant.group_size=4,quant.penalty=5/draft_quantized_model.pth")
 diffq.restore_quantized_state(model, quantized_state)
 model.eval()
 
