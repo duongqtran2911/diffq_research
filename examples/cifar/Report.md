@@ -31,8 +31,13 @@ Traceback (most recent call last):
 ValueError: cannot convert float NaN to integer
 ```
 
+Ashutosh: It seems that `bits.max()` is NaN? Could you attach a debugger and see what's causing this issue? 
+Also, if MobileNet is the only architecture with this issue and things are working fine for other architectures, we can also skip it for now and try completing the analysis for other architectures.
+
 2. Training other structures:
 - I am figuring out how to train the other structures (what hyper-parameters and how to initiate a model)
+
+Ashutosh: Which hyperparameters are you concerned about? The CIFAR10 code I had shared forks from [this repo](https://github.com/kuangliu/pytorch-cifar), and it has training hyperparameters for all listed architectures. 
 
 3. Inference on DiffQ-trained model:
 
