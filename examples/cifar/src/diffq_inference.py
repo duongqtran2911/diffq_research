@@ -29,10 +29,14 @@ from shufflenet import ShuffleNet
 from shufflenetv2 import ShuffleNetV2
 from vgg import VGG
 
+import sys
+sys.path.append("/u/60/trand7/unix/ResearchProject/diffq/examples/cifar")
+
 # Load the trained and quantized model
 model = LeNet(num_classes=10)
-model = torch.load("/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=lenet,quant.group_size=16,quant.penalty=5/quantized_model.pth")
-
+# path = 
+path = "/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=densenet,quant.group_size=16,quant.penalty=5/quantized_model.pth"
+model = torch.load(path)
 
 # Prepare the data loader
 img_resize = 32

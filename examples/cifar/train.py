@@ -95,8 +95,17 @@ def run(args):
         model = DLA(num_classes=num_classes)
     # elif args.model.lower() == 'dpn':
     #     model = DPN(num_classes=num_classes)
-    # elif args.model.lower() == 'efficientnet':
-    #     model = EfficientNet(num_classes=num_classes)
+    elif args.model.lower() == 'efficientnet':
+        cfg = {
+            'num_blocks': [1, 2, 2, 3, 3, 4, 1],
+            'expansion': [1, 6, 6, 6, 6, 6, 6],
+            'out_channels': [16, 24, 40, 80, 112, 192, 320],
+            'kernel_size': [3, 3, 5, 3, 5, 5, 3],
+            'stride': [1, 2, 2, 2, 1, 2, 1],
+            'dropout_rate': 0.2,
+            'drop_connect_rate': 0.2,
+        }
+        model = EfficientNet(cfg=cfg, num_classes=num_classes)
     # elif args.model.lower() == 'googlenet':
     #     model = GoogLeNet(num_classes=num_classes)
     elif args.model.lower() == 'lenet':
@@ -195,7 +204,8 @@ def run(args):
     solver = slv.Solver(data, model, criterion, optimizer, quantizer, args, model_size)
     solver.train()
     print("training finished")
-    print(f"Model is {quantizer.true_model_size():.1f} MB")
+    print(f"Model is {quantizer.true_model_size()} MB")
+    print(f"Quantized model is {quantizer.compressed_model_size()} MB")
     print("test size by quantizer")
     torch.save(model, "quantized_model.pth")
 
