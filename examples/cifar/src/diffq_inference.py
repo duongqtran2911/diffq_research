@@ -24,7 +24,7 @@ from pnasnet import PNASNet
 from preact_resnet import PreActResNet
 from regnet import RegNet
 from resnext import ResNeXt
-from senet import SENet
+from senet import SENet18
 from shufflenet import ShuffleNet
 from shufflenetv2 import ShuffleNetV2
 from vgg import VGG
@@ -35,7 +35,7 @@ sys.path.append("/u/60/trand7/unix/ResearchProject/diffq/examples/cifar")
 # Load the trained and quantized model
 model = LeNet(num_classes=10)
 # path = 
-path = "/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=densenet,quant.group_size=16,quant.penalty=5/quantized_model.pth"
+path = "/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=senet,quant.group_size=4,quant.penalty=5/quantized_model.pth"
 model = torch.load(path)
 
 # Prepare the data loader

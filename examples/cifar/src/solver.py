@@ -212,7 +212,7 @@ class Solver(object):
                 with torch.cuda.amp.autocast(bool(self.args.mixed)):
                     yhat = self.dmodel(inputs)
                     loss = self.criterion(yhat, targets)
-                    model_size = self.quantizer.model_size() if self.quantizer else 0
+                    model_size = self.quantizer.model_size() if self.quantizer else 0f
                     if self.penalty > 0:
                         loss = loss + self.penalty * model_size
             else:
