@@ -18,3 +18,4 @@ __pycache__
 examples/cifar/src/data/cifar10/cifar-10-python.tar.gz
 cifar-10-*
 cifar-100-*
+/u/60/trand7/unix/ResearchProject/diffq/outputs

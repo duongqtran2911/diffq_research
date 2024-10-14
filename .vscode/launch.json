@@ -11,7 +11,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["db.name=cifar10", "model=resnet", "quant.penalty=5", "quant.group_size=16"]
+            "args": ["db.name=cifar10", "model=senet", "quant.penalty=5", "quant.group_size=4"]
         }
     ]
 }

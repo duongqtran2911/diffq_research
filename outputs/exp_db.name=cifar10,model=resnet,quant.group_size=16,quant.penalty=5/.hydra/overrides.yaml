@@ -1,0 +1,4 @@
+- db.name=cifar10
+- model=resnet
+- quant.penalty=5
+- quant.group_size=16

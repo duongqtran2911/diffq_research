@@ -38,7 +38,7 @@ def run(args):
     from src.preact_resnet import PreActResNet
     from src.regnet import RegNet
     from src.resnext import ResNeXt
-    from src.senet import SENet
+    from src.senet import SENet18
     from src.shufflenet import ShuffleNet
     from src.shufflenetv2 import ShuffleNetV2
     from src.vgg import VGG
@@ -121,7 +121,7 @@ def run(args):
     elif args.model.lower() == 'resnext':
         model = ResNeXt(num_classes=num_classes)
     elif args.model.lower() == 'senet':
-        model = SENet(num_classes=num_classes)
+        model = SENet18()
     # elif args.model.lower() == 'shufflenet':
     #     model = ShuffleNet(num_classes=num_classes)
     # elif args.model.lower() == 'shufflenetv2':

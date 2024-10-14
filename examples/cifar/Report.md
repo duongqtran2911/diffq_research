@@ -137,78 +137,70 @@ ValueError: cannot convert float NaN to integer
 
 ### 1. densenet
 #### a. group_size = 4, penalty = 5
-=> epoch 58
-
+=> stopped at epoch 58
 #### b. group_size = 8, penalty = 5
-=> epoch 38
-
+=> success
 #### c. group_size = 16, penalty = 5
 => success
 
 
 ### 2. dla_simple
 #### a. group_size = 4, penalty = 5
-=> epoch 193
-
+=> stopped at epoch 193
 #### b. group_size = 8, penalty = 5
 => success
-
 #### c. group_size = 16, penalty = 5
-=> epoch 146
+=> stopped at epoch 146
 
 
 ### 3. dla
 #### a. group_size = 4, penalty = 5
-=> epoch 131
-
+=> stopped at epoch 131
 #### b. group_size = 8, penalty = 5
-=> epoch 139
-
+=> stopped at epoch 139
 #### c. group_size = 16, penalty = 5
-=> epoch 156
+=> stopped at epoch 156
 
 
 ### 4. efficientnet
 #### a. group_size = 4, penalty = 5
-=> ?
+=> stopped at epoch 1
+#### b. group_size = 8, penalty = 5
+=> stopped at epoch 1
+#### c. group_size = 16, penalty = 5
+=> stopped at epoch 1
+
 
 ### 5. lenet
 #### a. group_size = 4, penalty = 5
 => success
-
 #### b. group_size = 8, penalty = 5
-=> epoch 28
-
+=> success
 #### c. group_size = 16, penalty = 5
 => success
 
 
 ### 6. mobilenet
 #### a. group_size = 4, penalty = 5
-=> epoch 15
-
+=> stopped at epoch 15
 #### b. group_size = 8, penalty = 5
-=> epoch 16
-
+=> stopped at epoch 16
 #### c. group_size = 16, penalty = 5
-=> epoch 16
+=> stopped at epoch 16
 
 
 ### 7. mobilenetv2
 #### a. group_size = 8, penalty = 5
-=> epoch 13
-
+=> stopped at epoch 13
 #### b. group_size = 16, penalty = 5
-=> epoch 35
+=> stopped at epoch 35
 
 
 ### 8. resnet
 #### a. group_size = 4, penalty = 5
 => success
-
 #### b. group_size = 8, penalty = 5
 => success
-
 #### c. group_size = 16, penalty = 5
 => success
 
@@ -219,19 +211,116 @@ ValueError: cannot convert float NaN to integer
 
 
 ### 10. senet
-#### a. group_size = 8, penalty = 5
-=> ?
+#### a. group_size = 4, penalty = 5
+=> stopped at epoch 7
+#### b. group_size = 8, penalty = 5
+=> 
+#### c. group_size = 16, penalty = 5
+=> 
 
 
 ### 11. w_resnet
 #### a. group_size = 4, penalty = 5
 => success
-
 #### b. group_size = 8, penalty = 5
 => success
-
 #### c. group_size = 16, penalty = 5
 => success
+
+
+
+
+## Ideas:
+
+### 1. reducing learning rate
+
+### 2. check where the NaN happens
+
+
+
+
+densenet 8 - DONE (0.05)
+0: dla_simple 4 -> epoch 137
+1: densenet 4 -> epoch 67
+2: lenet 8 -> DONE (0.05)
+    dla_simple 16 -> epoch 149
+3: senet 4
+
+
+(lr=0.01)
+0 resnet 4
+1 resnet 8
+2 resnet 16
+3 resnet20 4
+4 resnet20 16
+5 w_resnet 16
+6 resnet20 8
+7 senet 8
+8 senet 16
+
+##########
+Results (compressed):
+
+densenet:
+4 - 90.36
+8 - 91.45
+16 - 89.32
+
+32/64(?) - og acc
+
+dla_simple:
+4 - 92.15
+8 - 91.78
+16 - 91.29
+32/64(?) - og acc
+
+lenet:
+4 - 71.04
+8 - 75.32
+16 - 70.70
+32/64(?) - og acc
+
+resnet:
+4 - 
+8 - 
+16 - 
+32/64(?) - og acc
+
+resnet20:
+4 - 
+8 - 
+16 - 
+32/64(?) - og acc
+
+senet:
+4 - 92.15
+32/64(?) - og acc
+
+w_resnet:
+4 - 93.96
+8 - 93.62
+16 - 
+32/64(?) - og acc
+
+- accuracy vs model size
+- accuracy vs quantization precision
+- lr: training cost? 
+  smaller lr -> stop training after loss saturated
+
+=> why are these different for different models? 
+
+eg. model size or accuracy constraints -> select the best model -> different trade-offs btw models -> different compressed model would be optimal
+
+
+or
+
+does one model has the best tradeoff all the time? -> why this model is special?
+
+
+
+- compare the before vs after compression accuracy too 
+
+
 
 
 

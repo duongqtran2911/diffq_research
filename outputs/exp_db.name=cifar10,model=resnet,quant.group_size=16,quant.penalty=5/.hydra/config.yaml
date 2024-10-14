@@ -40,8 +40,8 @@ model: resnet
 quant:
   min_size: 0.01
   bits: 0
-  penalty: 0
-  group_size: 8
+  penalty: 5
+  group_size: 16
   min_bits: 2
   init_bits: 8
   max_bits: 15
