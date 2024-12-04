@@ -161,8 +161,8 @@ if __name__ == "__main__":
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # Load DiffQ-trained model
-    model_diffq = load_quantized_model("/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=resnet,quant.group_size=8,quant.penalty=5/checkpoint.th", 
-                                       ResNet18, 10)
+    path = "/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=resnet/checkpoint.th"
+    model_diffq = load_quantized_model(path, ResNet18, 10)
     model_diffq.to(device)
 
     # Test the DiffQ-trained model

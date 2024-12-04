@@ -33,9 +33,8 @@ import sys
 sys.path.append("/u/60/trand7/unix/ResearchProject/diffq/examples/cifar")
 
 # Load the trained and quantized model
-model = LeNet(num_classes=10)
-# path = 
-path = "/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=senet,quant.group_size=4,quant.penalty=5/quantized_model.pth"
+path = "/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=resnet,quant.group_size=2,quant.penalty=5/quantized_model.pth"
+
 model = torch.load(path)
 
 # Prepare the data loader

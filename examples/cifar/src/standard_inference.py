@@ -1,26 +1,54 @@
 import torch
 import torchvision
 from torchvision import datasets, transforms
-from resnet import ResNet18  # Ensure this matches your model architecture
 from diffq import DiffQuantizer
 import numpy as np
 import diffq
 from sklearn.metrics import accuracy_score
 from torch.utils.data import random_split
 
+from mobilenet import MobileNet
+from resnet import ResNet18
+from resnet20 import resnet20
+from wide_resnet import Wide_ResNet
+
+from densenet import DenseNet
+from dla import DLA
+from dla_simple import SimpleDLA
+from dpn import DPN
+from efficientnet import EfficientNet
+from googlenet import GoogLeNet
+from lenet import LeNet
+from mobilenetv2 import MobileNetV2
+from pnasnet import PNASNet
+from preact_resnet import PreActResNet
+from regnet import RegNet
+from resnext import ResNeXt
+from senet import SENet18
+from shufflenet import ShuffleNet
+from shufflenetv2 import ShuffleNetV2
+from vgg import VGG
+
+import sys
+sys.path.append("/u/60/trand7/unix/ResearchProject/diffq/examples/cifar")
+
 # Load the trained and quantized model
-model = ResNet18(num_classes=10)
-# quantizer = DiffQuantizer(
-#     model, group_size=8,
-#     min_size=0.01,
-#     min_bits=2,
-#     init_bits=8,
-#     max_bits=15,
-#     exclude=[])
-path = "/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=resnet/checkpoint.th"
-quantized_state = torch.load(path)
-diffq.restore_quantized_state(model, quantized_state)
-model.eval()
+path = "/u/60/trand7/unix/ResearchProject/diffq/examples/cifar/outputs/exp_db.name=cifar10,model=lenet/checkpoint.th"
+
+checkpoint = torch.load(path)
+state_dict = checkpoint['state']
+
+# depth = 28
+# widen_factor = 10
+# do = 0.3
+# model = Wide_ResNet(depth=depth, widen_factor=widen_factor,
+                            # dropout_rate=do, num_classes=10)
+# model = DenseNet(num_classes=10)
+model = LeNet(num_classes=10)
+# model = SENet18()
+# model = MobileNet(num_classes=10)
+standard_state_dict = {k: v for k, v in state_dict.items() if not k.endswith('_diffq')}
+model.load_state_dict(standard_state_dict, strict=False)
 
 # Prepare the data loader
 img_resize = 32
@@ -49,7 +77,8 @@ test_loader = torch.utils.data.DataLoader(testset, batch_size=128, shuffle=False
 
 # Inference
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model.to(device)
+model = model.to(device)
+model.eval()
 
 # with torch.no_grad():
 #     preds, valid_labels = [], []
@@ -91,3 +120,4 @@ def average(metrics, count=1.):
 acc = average([total_acc], total)[0]
 
 print(f'Accuracy of the model on the test images: {acc:.2f}')
+

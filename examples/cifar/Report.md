@@ -248,7 +248,8 @@ densenet 8 - DONE (0.05)
 
 
 (lr=0.01)
-0 resnet 4
+
+<!-- 0 resnet 4
 1 resnet 8
 2 resnet 16
 3 resnet20 4
@@ -256,7 +257,25 @@ densenet 8 - DONE (0.05)
 5 w_resnet 16
 6 resnet20 8
 7 senet 8
-8 senet 16
+8 senet 16 -->
+
+0 w_resnet 4 - done
+1 resnet20 4 - done
+2 resnet20 8 - done
+3 resnet20 16 - done
+4 w_resnet 16 - done
+5 densenet og - done
+6 dla_simple og - done
+7 lenet og - done
+8 senet og - done
+9 mobilenet og - done -> mobilenetv2 og - done
+10 mobilenet 4 - done -> mobilenetv2 4 - epoch 168
+11 mobilenet 8 - done -> mobilenetv2 8 - done
+12 mobilenet 16 - done -> mobilenetv2 16 - epoch 187
+13 resnet20 og - done 
+14 resnet 2 - done
+15 w_resnet og - done
+
 
 ##########
 Results (compressed):
@@ -265,45 +284,58 @@ densenet:
 4 - 90.36
 8 - 91.45
 16 - 89.32
-
-32/64(?) - og acc
+32 - 92.21 - retrain and recheck too
 
 dla_simple:
 4 - 92.15
 8 - 91.78
 16 - 91.29
-32/64(?) - og acc
+32 - 93.29
 
 lenet:
 4 - 71.04
 8 - 75.32
 16 - 70.70
-32/64(?) - og acc
+32 - 75.93 - recheck 
 
 resnet:
-4 - 
-8 - 
-16 - 
-32/64(?) - og acc
+2 - 91.61
+4 - 92.41
+8 - 92.28
+16 - 92.13
+32 - 95.03
 
 resnet20:
 4 - 
 8 - 
 16 - 
-32/64(?) - og acc
+32 - og acc
 
 senet:
 4 - 92.15
-32/64(?) - og acc
+8 - 91.83
+16 - 92.19
+32 - 93.31
 
 w_resnet:
 4 - 93.96
 8 - 93.62
-16 - 
-32/64(?) - og acc
+16 - 91.21
+32 - 63.41 (?) -> 88.67
 
+mobilenet:
+4 - 89.53
+8 - 89.67
+16 - 89.26
+32 - 89.31 (?)
+
+
+- quantization group size 2?
 - accuracy vs model size
 - accuracy vs quantization precision
+- cost of obtaining a quantized model? relative to cost of training original model?
+ => what is happening during the quantization process?
+
 - lr: training cost? 
   smaller lr -> stop training after loss saturated
 
@@ -316,12 +348,29 @@ or
 
 does one model has the best tradeoff all the time? -> why this model is special?
 
-
-
 - compare the before vs after compression accuracy too 
 
 
 
+
+* REPORT
+
+1. Motivation: why DiffQ? why quantization?
+
+2. What's happening with DiffQ? process/logic? flow chart?
+  => questions: what do we want to understand?
+  + is bit ratio ~ model size ratio? eg. ResNet: 42.7 -> 2.7 for all bits quant values
+  + how the algorithm is implemented in the lib? explain the code
+  + contribute to the open source library? by giving the explanation of the diffQ (explanation, flow chart, how lib is implemented, ...)?
+
+3. Analysis of performance: acc vs model size, acc vs quant precision -> tradeoff?
+  + how general is the DiffQ method on new methods?
+    => several do not work
+  + training cost? what's the cost of obtaining the quantized model?
+    1 training loop takes how long? latency benchmarking in pytorch
+
+
+4. What I learned & difficulties
 
 
 
